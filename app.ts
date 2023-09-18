@@ -32,6 +32,8 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 // Routes
 app.use("/api/v1", userRouter); // Added a missing forward slash before "api/v1"
 
+
+
 // Unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   const err = new Error(`Route ${req.originalUrl} not found`) as any;
