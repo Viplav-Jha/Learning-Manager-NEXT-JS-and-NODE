@@ -176,9 +176,13 @@ export const loginUser = catchAsyncError(
         return next(new ErrorHandler("Invalid email or password", 400));
       }
 
-      //sending the token from jwts file
+      // Sending the token from the jwt.ts file
       sendToken(user, 200, res);
-    } catch (error: any) {}
+    } catch (error: any) {
+      // Handle the error or log it for debugging
+      console.error("Error in loginUser:", error);
+      return next(new ErrorHandler(error.message, 500)); // Respond with a 500 Internal Server Error
+    }
   }
 );
 
