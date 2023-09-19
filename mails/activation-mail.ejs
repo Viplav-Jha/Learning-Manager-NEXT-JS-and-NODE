@@ -10,10 +10,13 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
             background-color: #ffffff;
             padding: 20px;
             border-radius: 5px;
@@ -34,18 +37,37 @@
             text-decoration: none;
             border-radius: 5px;
         }
+        /* Email Template Styles */
+        .email-content {
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome To LMS Activate Your Account</h1>
-        <p>Hello <%= user.name %>,</p>
-        <p>Thank you for signing up with our Elearning. To activate your account, please use the fallowing activation code:</p>
-        <p>Please enter this activation code on the activation page within the next 5 minutes.</p>
-        <h2><%= activationCode %></h2>
-        <p>If you have any questions or need assistance, please don't hesitate to contact us.<a href="mailto:support@vlearning.com">support@vlearning.com</a></p>
-        <p>Best regards,</p>
-        <p>VLearning</p>
+        <!-- Include the email template here -->
+        <div class="email-content">
+            <h1>Welcome To LMS Activate Your Account</h1>
+            <p>Hello <%= user.name %>,</p>
+            <p>Thank you for signing up with our Elearning. To activate your account, please use the following activation code:</p>
+            <p>Please enter this activation code on the activation page within the next 5 minutes.</p>
+            <h2><%= activationCode %></h2>
+            <p>If you have any questions or need assistance, please don't hesitate to contact us. <a href="mailto:support@vlearning.com">support@vlearning.com</a></p>
+            <p>Best regards,</p>
+            <p>VLearning</p>
+            <a href="https://example.com" class="cta-button">Visit Our Website</a>
+        </div>
+        <!-- End of email template -->
     </div>
 </body>
 </html>
