@@ -41,7 +41,7 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(err);
 });
 
-// Error middleware
+// Error handling middleware should be registered last
 app.use(ErrorMiddleware);
 
 export default app;
