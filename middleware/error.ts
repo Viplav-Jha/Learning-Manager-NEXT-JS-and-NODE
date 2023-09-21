@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { ErrorHandler } from "../utils/ErrorHandler";
 
   export const ErrorMiddleware = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  err.statusCode = err.statusCode || 500;
-  err.message = err.message || "internal server error";
+    err: any,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    err.statusCode = err.statusCode || 500;
+    err.message = err.message || "Internal server error";
 
   // wrong mongodb id Error
   if (err.name === "CasteError") {
@@ -24,13 +24,13 @@ import { ErrorHandler } from "../utils/ErrorHandler";
 
   // wrong jwt error
   if (err.name === "jsonwebtokenError") {
-    const message = `Json web token is invalid, try again`;
+    const message = 'Json web token is invalid, try again';
     err = new ErrorHandler(message, 400);
   }
 
   //JWT  expired error
   if (err.name === "TokenExpiredError") {
-    const message = `Json web token is expired , try again`;
+    const message = 'Json web token is expired , try again';
     err = new ErrorHandler(message, 400);
   }
   res.status(err.statusCode).json({
