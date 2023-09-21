@@ -2,6 +2,7 @@ require("dotenv").config();
 import { Response } from "express";
 import { IUser } from "../models/user.model";
 import { redis } from "./radis";
+import jwt from "jsonwebtoken";
 
 interface ITokenOptions {
   expire: Date;
@@ -47,6 +48,9 @@ export const sendToken = (user: IUser, statusCode: number, res: Response) => {
 
   console.log("Access Token:", accessToken);
   console.log("Refresh Token:", refreshToken);
+
+// error handling for expire token
+
 
   //upload session to radis
   redis.set(user._id, JSON.stringify(user) as any);
