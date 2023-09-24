@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, response } from "express";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
@@ -10,6 +10,7 @@ import { error } from "console";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
+import { Interface } from "readline";
 
 //upload course
 
@@ -298,8 +299,7 @@ export const addAnswer = catchAsyncError(
 // add review in course
 interface IAddReviewData {
   review: string;
-  courseId;
-  string;
+  courseId: string;
   rating: number;
   user: string;
 }
@@ -344,8 +344,64 @@ export const addReview = catchAsyncError(
       }
 
       await course?.save(); //saving review in mogodb
+
+      const notification = {
+        title: "New Review Reveived",
+        message: `${req.user?.name} has given on your review in${course?.name}`,
+      };
+      //create notification
+      res.status(200).json({
+        success: true,
+        course,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// add reply in review
+interface IAddReviewData {
+  comment: string;
+  courseId: string;
+  reviewId: string;
+}
+export const addReplyToReview = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { comment, courseId, reviewId } = req.body as IAddReviewData;
+
+      const course = await CourseModel.findById(courseId);
+
+      if (!course) {
+        return next(new ErrorHandler("Course not found", 404));
+      }
+
+      const review = course?.reviews?.find(
+        (rev: any) => rev._id.toString() === reviewId
+      );
+
+      if (!review) {
+        return next(new ErrorHandler("Review not fond", 404));
+      }
+
+      const replyData: any = {
+        user: req.user,
+        comment,
+      };
+
+      if (!review.commentReplies) {
+        review.commentReplies = [];
+      }
+      review.commentReplies.push(replyData);
+
+      await course?.save();
+      res.status(200).json({
+        sccess: true,
+        course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );
