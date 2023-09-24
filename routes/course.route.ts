@@ -2,6 +2,8 @@ import express, { NextFunction } from "express";
 import {
     addAnswer,
   addQuestion,
+  addReplyToReview,
+  addReview,
   editCourse,
   getAllCourses,
   getCourseByUser,
@@ -52,4 +54,16 @@ courseRouter.put(
     "/add-answer",
     isAuthenticated,
     addAnswer,
+  );
+  courseRouter.put(
+    "/add-review/:id",
+    isAuthenticated,
+    addReview,
+  );
+
+  courseRouter.put(
+    "/add-reply",
+    isAuthenticated,
+    authroizeRole("admin"),
+    addReplyToReview,
   );
