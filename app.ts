@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
 import { courseRouter } from "./routes/course.route";
+import orderRouter from "./routes/order.route";
 
 require("dotenv").config();
 
@@ -31,8 +32,12 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Routes
-app.use("/api/v1", userRouter); // Added a missing forward slash before "api/v1"
-app.use("/api/v1", courseRouter);
+// app.use("/api/v1", userRouter); // Added a missing forward slash before "api/v1"
+// app.use("/api/v1", courseRouter);
+// app.use("api/v1",orderRouter)
+
+//one line route
+app.use("/api/v1", userRouter,courseRouter,orderRouter);
 
 // Unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
