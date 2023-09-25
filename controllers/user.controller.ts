@@ -55,7 +55,7 @@ export const registrationUser = catchAsyncError(
 
       // Render the email template
       const html = await ejs.renderFile(
-        path.join(__dirname, "../mails/activation-mail.ejs"),
+        path.join(__dirname, "../mails/activation-mail.ejs"), 
         data
       );
 
