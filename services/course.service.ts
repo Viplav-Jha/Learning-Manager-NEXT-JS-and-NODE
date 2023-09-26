@@ -10,3 +10,4 @@ export const createCourse = catchAsyncError(async(data:any,res:Response)=>{
         course
     });
 })
+
