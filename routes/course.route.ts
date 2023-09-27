@@ -4,8 +4,11 @@ import {
   addQuestion,
   addReplyToReview,
   addReview,
+  deleteCourse,
   editCourse,
+  getAllCourse,
   getAllCourses,
+  getCourseAnalytics,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
@@ -67,3 +70,22 @@ courseRouter.put(
     authroizeRole("admin"),
     addReplyToReview,
   );
+  courseRouter.get(
+    "/add-courses",
+    isAuthenticated,
+    authroizeRole("admin"),
+    getAllCourses,
+  );
+  courseRouter.delete(
+    "/delete-course/:id",
+    isAuthenticated,
+    authroizeRole("admin"),
+    deleteCourse,
+  );
+  courseRouter.get(
+    "/get-courses-analytics",
+    isAuthenticated,
+    authroizeRole("admin"),
+    getCourseAnalytics,
+  );
+
