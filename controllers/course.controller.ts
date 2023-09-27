@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, response } from "express";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCoursesServices } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/radis";
 import mongoose from "mongoose";
@@ -12,6 +12,9 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { Interface } from "readline";
 import NotificationModel from "../models/notificationModel";
+import { generateLast12MonthsData } from "../utils/analytics.generator";
+
+
 
 //upload course
 
@@ -274,7 +277,7 @@ export const addAnswer = catchAsyncError(
       await course?.save();
 
       if (req.user?._id === question.user._id) {
-        
+
         //create a notification
         await NotificationModel.create({
           user:req.user?._id,
@@ -417,6 +420,60 @@ export const addReplyToReview = catchAsyncError(
       res.status(200).json({
         sccess: true,
         course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//get all courses --only for admin
+export const getAllCourse = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllCoursesServices(res)
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//Delete course --only for admin
+export const deleteCourse = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+
+      const course = await CourseModel.findById(id);
+
+      if (!course) {
+        return next(new ErrorHandler("course not found", 404));
+      }
+
+      await course.deleteOne({id} );
+
+      //delete from redis also
+      await redis.del(id);
+
+      res.status(200).json({
+        success: true,
+        message: "Course deleted successfully",
+      });
+    } catch (error: any) {
+      next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// get courses analytics -- only for Admin
+export const getCourseAnalytics = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const courses = await generateLast12MonthsData(CourseModel);
+
+      res.status(200).json({
+        success: true,
+        courses,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));

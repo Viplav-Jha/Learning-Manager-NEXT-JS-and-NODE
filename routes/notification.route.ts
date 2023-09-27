@@ -11,6 +11,8 @@ notification.get(
   getNotification
 );
 
-notification.put("/update-notifications/:id",isAuthenticated,authroizeRole("admin"),updateNotifications)
+notification.put("/update-notifications/:id",isAuthenticated,authroizeRole("admin"),updateNotifications);
+
+
 
 export default notification;

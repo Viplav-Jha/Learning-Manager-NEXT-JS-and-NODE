@@ -135,7 +135,7 @@ const linkSchema = new Schema<ILink>({
         default:0,
      },
 
- })
+ },{timestamps:true})
 
 
 const CourseModel = mongoose.model<ICourse>("Course",courseSchema);
