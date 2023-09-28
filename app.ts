@@ -7,6 +7,7 @@ import { courseRouter } from "./routes/course.route";
 import orderRouter from "./routes/order.route";
 import notification from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
+import layoutRouter from "./routes/layout.route";
 
 require("dotenv").config();
 
@@ -40,7 +41,7 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 // app.use("api/v1",notification)
 
 //one line route
-app.use("/api/v1", userRouter,courseRouter,orderRouter,notification,analyticsRouter);
+app.use("/api/v1", userRouter,courseRouter,orderRouter,notification,analyticsRouter,layoutRouter);
 
 // Unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
