@@ -98,6 +98,9 @@ export const getSingleCourse = catchAsyncError(
           "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links -demoUrl"
         );
 
+        //setting expire time in redis
+       await redis.set(courseId,JSON.stringify(course),'EX',604800); // 7days
+
         console.log("hitting mongoDB");
         //adding to redis
         await redis.set(courseId, JSON.stringify(course));
