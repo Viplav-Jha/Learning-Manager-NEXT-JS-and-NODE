@@ -24,17 +24,19 @@ export const isAuthenticated = catchAsyncError(
       return next(new ErrorHandler("access token is not valid", 400));
     }
 
+    //saving user data in radis
     const user = await redis.get(decoded.id);
 
     if (!user) {
-      return next(new ErrorHandler("user not found", 400));
+      return next(
+        new ErrorHandler("Please login to access this resource", 400)
+      );
     }
     req.user = JSON.parse(user);
 
     next();
   }
 );
-
 //vaidate user role
 
 export const authroizeRole = (...roles: string[]) => {
@@ -50,7 +52,3 @@ export const authroizeRole = (...roles: string[]) => {
     next();
   };
 };
-
-
-
-
