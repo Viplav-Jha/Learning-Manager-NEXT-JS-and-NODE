@@ -2,7 +2,10 @@ import { NextFunction, Request, Response, response } from "express";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
-import { createCourse, getAllCoursesServices } from "../services/course.service";
+import {
+  createCourse,
+  getAllCoursesServices,
+} from "../services/course.service";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/radis";
 import mongoose from "mongoose";
@@ -13,8 +16,6 @@ import sendMail from "../utils/sendMail";
 import { Interface } from "readline";
 import NotificationModel from "../models/notificationModel";
 import { generateLast12MonthsData } from "../utils/analytics.generator";
-
-
 
 //upload course
 
@@ -99,7 +100,7 @@ export const getSingleCourse = catchAsyncError(
         );
 
         //setting expire time in redis
-       await redis.set(courseId,JSON.stringify(course),'EX',604800); // 7days
+        await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 7days
 
         console.log("hitting mongoDB");
         //adding to redis
@@ -275,20 +276,15 @@ export const addAnswer = catchAsyncError(
       //add this answer to our course content
       question.questionReplies.push(newAnswer);
 
-    
-
       await course?.save();
 
       if (req.user?._id === question.user._id) {
-
         //create a notification
         await NotificationModel.create({
-          user:req.user?._id,
-          title:"New Question Reply Received",
-          message:`You have a new question reply ${courseContent.title}`
-        })
-
-
+          user: req.user?._id,
+          title: "New Question Reply Received",
+          message: `You have a new question reply ${courseContent.title}`,
+        });
       } else {
         const data = {
           name: question.user.name,
@@ -434,7 +430,7 @@ export const addReplyToReview = catchAsyncError(
 export const getAllCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      getAllCoursesServices(res)
+      getAllCoursesServices(res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
@@ -453,7 +449,7 @@ export const deleteCourse = catchAsyncError(
         return next(new ErrorHandler("course not found", 404));
       }
 
-      await course.deleteOne({id} );
+      await course.deleteOne({ id });
 
       //delete from redis also
       await redis.del(id);
