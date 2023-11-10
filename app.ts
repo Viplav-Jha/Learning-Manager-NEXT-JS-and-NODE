@@ -22,7 +22,8 @@ app.use(cookieParser());
 // CORS (Cross-Origin Resource Sharing)
 app.use(
   cors({
-    origin: process.env.ORIGIN || "*", // Allow requests from any origin by default
+    origin:["http://localhost:3000"],
+    credentials:true // Allow requests from any origin by default
   })
 );
 
