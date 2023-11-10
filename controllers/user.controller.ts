@@ -3,7 +3,7 @@ import { userModel, IUser } from "../models/user.model";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
-import ejs from "ejs";
+import ejs from "ejs"
 import path from "path";
 import sendMail from "../utils/sendMail";
 import {
